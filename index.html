@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f7f9"><meta name="description" content="Praktyczne narzędzia do Twoich projektów. Oblicz liczbę szczebelków i równe odstępy w płocie.">
+<title>Warsztat — Twoje narzędzia</title>
+<link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
+</head>
+<body>
+<aside class="sidebar">
+<a class="brand" href="./"><span class="brand-icon">w<span>·</span></span> warsztat<span class="brand-dot">.</span></a>
+<div class="workspace-label">TWOJA PRZESTRZEŃ</div>
+<a class="nav-link" href="#narzedzia"><span>▦</span> Wszystkie narzędzia <small>01</small></a>
+<div class="nav-section">BUDOWA I MAJSTERKOWANIE</div>
+<a class="nav-link active" href="#kalkulator"><span>▥</span> Rozstaw szczebelków</a>
+<div class="sidebar-bottom"><span class="little-spark">✳</span><p>Dobry projekt zaczyna się<br>od dokładnych obliczeń.</p><div class="profile"><span>TW</span><div>Twój warsztat<small>Osobisty zestaw narzędzi</small></div></div></div>
+</aside>
+<div class="main-shell">
+<header class="topbar"><div>Twoje narzędzia <span>/</span> <strong>Rozstaw szczebelków</strong></div><span class="private-label"><i></i> Do Twoich projektów</span></header>
+<main id="narzedzia">
+<div class="breadcrumbs">BUDOWA I MAJSTERKOWANIE <span> / </span> KALKULATOR</div>
+<section class="page-heading" id="kalkulator"><div><div class="heading-icon">▥</div><h1>Równo od pierwszego<br>do ostatniego szczebelka<span>.</span></h1><p>Oblicz idealny rozstaw w kilku prostych krokach.<br>Ty budujesz, my zajmiemy się liczbami.</p></div><span class="tool-badge">NARZĘDZIE 01 <span aria-hidden="true" class="arrow-icon"></span></span></section>
+<div class="calculator-layout">
+<section class="panel input-panel"><div class="panel-title"><span class="step">01</span><h2>Wymiary Twojego segmentu</h2></div><p class="panel-description">Zmierz przestrzeń między wewnętrznymi krawędziami słupów.</p>
+<form id="calculator-form" novalidate>
+<div class="unit-line"><span>Jednostka wymiarów</span><div class="unit-toggle" aria-label="Jednostka"><button type="button" data-unit="cm" class="selected" aria-pressed="true">cm</button><button type="button" data-unit="mm" aria-pressed="false">mm</button></div></div>
+<label for="width">Szerokość segmentu <span class="field-hint">↔</span></label><div class="input-wrap"><input id="width" type="text" inputmode="decimal" value="200" autocomplete="off"><span class="unit">cm</span></div><small class="help">Odległość w świetle między słupami</small>
+<label for="slat">Szerokość szczebelka</label><div class="input-wrap"><input id="slat" type="text" inputmode="decimal" value="9" autocomplete="off"><span class="unit">cm</span></div>
+<div class="mode-switch" role="group" aria-label="Sposób obliczania"><button class="selected" type="button" data-mode="count" aria-pressed="true">Znam liczbę szczebelków</button><button type="button" data-mode="gap" aria-pressed="false">Dobierz liczbę</button></div>
+<div id="count-field"><label for="count">Liczba szczebelków</label><div class="number-stepper"><button type="button" id="decrease" aria-label="Odejmij szczebelek">−</button><input id="count" type="text" inputmode="numeric" value="15" autocomplete="off"><button type="button" id="increase" aria-label="Dodaj szczebelek">+</button></div></div>
+<div id="gap-field" hidden><label for="target">Maksymalna szerokość przerwy</label><div class="input-wrap"><input id="target" type="text" inputmode="decimal" value="5" autocomplete="off"><span class="unit">cm</span></div><small class="help">Dobierzemy najmniejszą liczbę, która spełnia ten warunek.</small></div>
+<p class="error" id="error" role="alert" hidden></p>
+<button class="calculate-button" type="submit">Oblicz rozstaw <span aria-hidden="true" class="arrow-icon"></span></button>
+</form><div class="input-note"><span>ⓘ</span> Równe przerwy między szczebelkami i przy obu słupach.</div></section>
+<div class="result-column">
+<section class="panel result-panel" aria-live="polite"><div class="result-top"><span class="eyebrow">TWÓJ WYNIK</span><span class="success-tag" id="result-tag"><i></i> Gotowe do budowy</span></div><div id="result-content"><h2>Przerwa między szczebelkami</h2><div class="big-result"><span id="gap-result">4,06</span><span class="result-unit">cm</span></div><p class="result-caption">Taki sam odstęp w każdym miejscu segmentu.</p><div class="result-stats"><div><span>Liczba szczebelków</span><strong id="count-result">15 <small>szt.</small></strong></div><div><span>Liczba przerw</span><strong id="gaps-result">16 <small>szt.</small></strong></div><div><span>Szerokość segmentu</span><strong id="width-result">200 <small>cm</small></strong></div></div><div class="precision-note" id="precision-note">Do wyznaczania pozycji używaj dokładnego wyniku, nie sumy zaokrąglonych przerw.</div></div></section>
+<section class="panel preview-panel"><div class="preview-title"><h2>Twój segment w podglądzie</h2><span>SCHEMAT POGLĄDOWY</span></div><div id="preview-content"><div class="fence-scene"><div class="width-dimension"><span id="dimension">200 cm</span></div><div class="fence"><div class="post"></div><div class="slats" id="slats"></div><div class="post"></div></div><div class="ground"></div><div class="preview-legend"><span><i class="legend-slat"></i> Szczebelek <b id="legend-width">9 cm</b></span><span><i class="legend-gap"></i> Przerwa <b id="legend-gap">4,06 cm</b></span></div></div><div class="preview-tip"><span aria-hidden="true" class="turn-icon"></span><p>Mały detal, duża różnica.<br><strong>Pamiętaj o przerwach przy obu słupach.</strong></p></div></div></section>
+</div></div>
+<section class="formula-section"><div class="formula-icon">ƒ</div><div><h2>Proste liczby. Precyzyjny efekt.</h2><p>Od szerokości segmentu odejmujemy szerokość wszystkich szczebelków,<br>a pozostałe miejsce dzielimy na równe przerwy.</p></div><div class="formula"><span>segment − (liczba × szerokość szczebelka)</span><span>liczba szczebelków + 1</span></div></section>
+<section class="positions-section" id="positions-section"><details><summary>Wymiary montażowe <span>Pozycje szczebelków od lewego słupa ↓</span></summary><p>Odległość od wewnętrznej krawędzi lewego słupa do lewej krawędzi każdego szczebelka. Wyniki zaokrąglono do 0,01 jednostki.</p><div class="table-scroll"><table><thead><tr><th>Szczebelek</th><th>Lewa krawędź</th><th>Prawa krawędź</th></tr></thead><tbody id="positions"></tbody></table></div></details></section>
+<footer><span><strong>warsztat.</strong> Mniej zgadywania. Więcej tworzenia.</span><span>Zrobione z myślą o Twoich projektach <span class="footer-spark">✳</span></span></footer>
+</main></div>
+</body></html>
