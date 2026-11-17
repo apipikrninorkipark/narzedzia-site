@@ -1,0 +1,51 @@
+const {chromium}=require('playwright');
+const http=require('node:http');
+const fs=require('node:fs/promises');
+const path=require('node:path');
+const assert=require('node:assert/strict');
+(async()=>{
+ const root=path.resolve(__dirname,'..');
+ const server=http.createServer(async(req,res)=>{try{
+  res.setHeader('Content-Type',req.url.endsWith('.js')?'application/javascript':'text/html');
+  res.end(await fs.readFile(path.join(root,req.url==='/'?'index.html':req.url)));
+ }catch{res.writeHead(404).end();}}).listen(8766);
+ let browser;
+ try{
+  browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium'});
+  const context=await browser.newContext();const page=await context.newPage();const errors=[];
+  page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
+  await context.route('https://esm.sh/**',r=>r.fulfill({contentType:'application/javascript',body:'export const createClient=url=>({supabaseUrl:url,auth:{onAuthStateChange(){}}});'}));
+  let prices=[],valid=true;
+  await context.route('**/functions/v1/workspace-api',async r=>{
+   const b=r.request().postDataJSON();let data={ok:true},status=200;
+   if(!valid||!r.request().headers().authorization){status=401;data={error:'Sesja wygasła.'};}
+   else if(b.action==='granada-list')data={prices:prices.map(({inputs,...p})=>p)};
+   else if(b.action==='granada-save'){const price={id:String(prices.length+1),name:b.name,inputs:b.values,created_at:new Date().toISOString()};prices.unshift(price);data={price};}
+   else if(b.action==='granada-get')data={price:prices.find(p=>p.id===b.id)};
+   await r.fulfill({status,contentType:'application/json',body:JSON.stringify(data)});
+  });
+  await page.goto('http://localhost:8766/granada.html');await page.waitForURL('**/index.html');
+  await page.evaluate(()=>sessionStorage.setItem('workspace-token','a'.repeat(64)));
+  await page.goto('http://localhost:8766/granada.html');
+  await page.getByText('Połączono ze wspólną bazą.',{exact:false}).waitFor();
+  assert.equal(await page.locator('#loadCloud').isDisabled(),true);
+  const input=page.locator('[data-cell="D3"]');await input.fill('444');await input.dispatchEvent('change');
+  await page.locator('#priceName').fill('<b>Lato</b>');await page.locator('#saveCloud').click();
+  await page.getByText('Zapisano nową wersję cennika we wspólnej bazie.',{exact:true}).waitFor();
+  assert.equal(prices[0].inputs.D3,444);assert.equal(await page.locator('#priceList b').count(),0);
+  await input.fill('555');await input.dispatchEvent('change');
+  await page.locator('#loadCloud').click();await page.getByText('Wczytano cennik z bazy.',{exact:true}).waitFor();
+  assert.equal(await input.inputValue(),'444');
+  const second=await context.newPage();
+  await second.goto('http://localhost:8766/index.html');await second.evaluate(()=>sessionStorage.setItem('workspace-token','a'.repeat(64)));
+  second.on('dialog',d=>d.accept());await second.goto('http://localhost:8766/granada.html');
+  await second.locator('#loadCloud').click();await second.getByText('Wczytano cennik z bazy.',{exact:true}).waitFor();
+  assert.equal(await second.locator('[data-cell="D3"]').inputValue(),'444');
+  await page.setViewportSize({width:390,height:844});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  valid=false;await page.locator('#refreshCloud').click();await page.waitForURL('**/index.html');
+  assert.equal(await page.evaluate(()=>sessionStorage.getItem('workspace-token')),null);
+  assert.deepEqual(errors,[]);
+  console.log('PASS: GRANADA session gate, cloud save/load, shared record, escaped names, mobile layout, expired session. API mocked.');
+ }finally{if(browser)await browser.close();server.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

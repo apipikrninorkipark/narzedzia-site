@@ -1,3 +1,5 @@
+import { validGranada } from './granada.ts';
+import { validGranada } from './granada.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const db = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
@@ -67,6 +69,32 @@ Deno.serve(async (req: Request) => {
     if (action === 'logout') {
       checked(await db.from('workspace_sessions').delete().eq('token_hash', tokenHash));
       return reply({ ok: true });
+    }
+    if (action === 'granada-list') return reply({ prices: checked(await db.from('workspace_granada_prices')
+      .select('id,name,created_at').order('created_at', { ascending: false }).limit(100)) });
+    if (action === 'granada-get') {
+      if (typeof body.id !== 'string' || !/^[a-f0-9-]{36}$/i.test(body.id)) return reply({ error: 'Niepoprawny identyfikator.' }, 400);
+      const price = checked(await db.from('workspace_granada_prices').select('*').eq('id', body.id).maybeSingle());
+      return price ? reply({ price }) : reply({ error: 'Nie znaleziono cennika.' }, 404);
+    }
+    if (action === 'granada-save') {
+      if (typeof body.name !== 'string' || !body.name.trim() || body.name.trim().length > 120 || !validGranada(body.values))
+        return reply({ error: 'Sprawdź nazwę i wartości cennika.' }, 400);
+      const price = checked(await db.from('workspace_granada_prices').insert({ name: body.name.trim(), inputs: body.values }).select().single());
+      return reply({ price });
+    }
+    if (action === 'granada-list') return reply({ prices: checked(await db.from('workspace_granada_prices')
+      .select('id,name,created_at').order('created_at', { ascending: false }).limit(100)) });
+    if (action === 'granada-get') {
+      if (typeof body.id !== 'string' || !/^[a-f0-9-]{36}$/i.test(body.id)) return reply({ error: 'Niepoprawny identyfikator.' }, 400);
+      const price = checked(await db.from('workspace_granada_prices').select('*').eq('id', body.id).maybeSingle());
+      return price ? reply({ price }) : reply({ error: 'Nie znaleziono cennika.' }, 404);
+    }
+    if (action === 'granada-save') {
+      if (typeof body.name !== 'string' || !body.name.trim() || body.name.trim().length > 120 || !validGranada(body.values))
+        return reply({ error: 'Sprawdź nazwę i wartości cennika.' }, 400);
+      const price = checked(await db.from('workspace_granada_prices').insert({ name: body.name.trim(), inputs: body.values }).select().single());
+      return reply({ price });
     }
     if (action === 'list') return reply({ projects: checked(await db.from('workspace_projects')
       .select('*').order('created_at', { ascending: false }).limit(100)) });
