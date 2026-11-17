@@ -82,3 +82,5 @@ Tabela `workspace_granada_prices` ma RLS i jest dostępna wyłącznie przez Edge
 Sprawdzenie docelowe: bez sesji `granada-list`, `granada-get` i `granada-save` powinny zwracać 401 (z dozwolonego origin); po PIN-ie zapisz cennik, otwórz drugą przeglądarkę, zaloguj się tym samym PIN-em i wczytaj zapis. Po zmianie PIN-u poprzednia sesja musi zostać odrzucona. Sprawdź też odrzucanie ujemnych cen i prowizji 100% oraz brak bezpośredniego dostępu do tabeli publicznym kluczem.
 
 Test integracji z symulowanym API: `CHROMIUM_PATH=/usr/bin/chromium node tests/granada-ui.cjs`.
+
+W sekcji **Balia** pole **Stawka za osobę (PLN)** zmienia ceny wszystkich grup. Domyślnie wynosi 95 PLN. Stawka jest częścią kopii roboczej, eksportu JSON i zapisu w bazie. Starsze cenniki bez stawki przyjmują 95 PLN. Po dodaniu tego pola należy ponownie wdrożyć `workspace-api` wraz z `granada.ts`; nowa migracja SQL nie jest potrzebna.
