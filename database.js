@@ -3,5 +3,6 @@ import { createClient } from
 
 export const database = createClient(
   'https://pxmasspzretdgribwfgn.supabase.co',
-  'sb_publishable_rN1Jvu97983m8bLVaDHsFg_hn2f06Qf'
+  'sb_publishable_rN1Jvu97983m8bLVaDHsFg_hn2f06Qf',
+  { auth: { persistSession: false, detectSessionInUrl: false } }
 );

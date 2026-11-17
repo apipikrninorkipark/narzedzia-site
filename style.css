@@ -5,3 +5,24 @@
 @media(max-width:650px){.topbar .private-label{display:none}.topbar{padding:0 20px}main{padding:26px 18px 0}.page-heading{margin:22px 0 26px}.page-heading h1{font-size:31px;letter-spacing:-1.2px}.page-heading p{font-size:11px}.tool-badge{display:none}.calculator-layout{display:flex;flex-direction:column;gap:18px}.input-panel{padding:23px}.panel-title h2{font-size:14px}.panel-description{font-size:11px}.mode-switch button{font-size:10px}.mode-switch{gap:20px}label{font-size:12px}.unit-line{font-size:11px}.input-wrap{height:49px}.help{font-size:10px}.input-note{font-size:10px}.calculate-button{font-size:12px;padding:16px}.result-panel{padding:25px}.result-panel h2{font-size:13px}.big-result>span:first-child{font-size:68px}.result-stats>div>span{font-size:9px}.result-stats strong{font-size:23px}.result-caption{font-size:10px}.preview-panel{padding:24px}.preview-title h2{font-size:12px}.fence-scene{padding:0 4px}.formula-section{align-items:flex-start;flex-wrap:wrap}.formula-section>div:nth-child(2){flex:1}.formula-section h2{font-size:11px}.formula-section p{font-size:10px}.formula{margin:5px auto 0;max-width:none;font-size:10px}.formula-icon{flex-shrink:0}summary>span{float:none;display:block;font-size:9px;margin-top:8px}footer{gap:20px;align-items:flex-start;font-size:8px;line-height:1.8}footer>span{flex:1}footer strong{display:block}.success-tag{font-size:8px}.preview-tip p{font-size:10px}.preview-tip strong{font-size:9px}}
 @media(prefers-reduced-motion:no-preference){button,a{transition:background .15s ease}.result-panel{transition:opacity .15s ease}}
 .arrow-icon{display:inline-block;width:9px;height:9px;border-top:1.5px solid currentColor;border-right:1.5px solid currentColor;position:relative;margin:3px}.arrow-icon:after{content:"";position:absolute;width:12px;height:1.5px;background:currentColor;right:-2px;top:3px;transform:rotate(-45deg)}.turn-icon{display:inline-block;width:14px;height:17px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;position:relative;margin:0 3px 5px 0}.turn-icon:after{content:"";width:5px;height:5px;border-top:1.5px solid currentColor;border-right:1.5px solid currentColor;position:absolute;bottom:-3.5px;right:0;transform:rotate(45deg)}
+
+/* Workspace access and shared projects */
+[hidden] { display: none !important; }
+.access-screen { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+.access-card { width: min(100%, 440px); padding: 32px; border: 1px solid #e0e4e8; border-radius: 20px; background: white; color: #1c2935; box-shadow: 0 12px 50px #17232e12; }
+dialog.access-card { margin: auto; max-height: 90dvh; overflow: auto; }
+dialog::backdrop { background: #15253680; }
+.access-card h1 { font-size: 28px; line-height: 1.2; }
+.access-card p { margin: 16px 0; line-height: 1.6; }
+.access-card label, .projects-panel label { display: block; margin: 16px 0 8px; }
+.access-card input, .projects-panel input { width: 100%; padding: 12px; border: 1px solid #bdc7d0; border-radius: 8px; font: inherit; }
+.access-card button, .projects-panel button, .workspace-actions button { padding: 10px 16px; border: 1px solid #bdc7d0; border-radius: 8px; background: #f6f7f9; color: #1c2935; font: inherit; cursor: pointer; }
+.access-card form > button, .projects-panel form > button { margin-top: 16px; background: #243d32; color: white; }
+button:disabled { opacity: .6; cursor: wait; }
+.close-settings { float: right; }
+.workspace-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.projects-panel { margin: 32px 0; padding: 28px; }
+.projects-panel ul { padding: 0; list-style: none; display: grid; gap: 8px; margin: 16px 0; }
+.projects-panel li button { text-align: left; overflow-wrap: anywhere; }
+#access-message, #settings-message, #projects-message { min-height: 1.5em; }
+@media (max-width: 700px) { .topbar { height: auto; min-height: 72px; flex-wrap: wrap; gap: 12px; padding-block: 12px; } }

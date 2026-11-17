@@ -8,6 +8,43 @@
 <link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
 </head>
 <body>
+<section id="access-screen" class="access-screen">
+  <div class="access-card">
+    <p class="eyebrow">WSPÓLNY WARSZTAT</p>
+    <h1>Twoja przestrzeń robocza</h1>
+    <p>Wpisz wspólny PIN, aby otworzyć narzędzia i projekty.</p>
+    <form id="pin-form">
+      <label for="workspace-pin">PIN dostępu</label>
+      <input id="workspace-pin" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="off" required aria-describedby="access-message">
+      <button id="pin-submit" type="submit">Otwórz warsztat</button>
+    </form>
+    <p id="access-message" role="status"></p>
+    <button type="button" data-open-settings>Ustawienia administratora</button>
+    <noscript>Do otwarcia przestrzeni potrzebny jest JavaScript.</noscript>
+  </div>
+</section>
+<dialog id="settings-dialog" class="access-card">
+  <button type="button" id="close-settings" class="close-settings" aria-label="Zamknij ustawienia">Zamknij</button>
+  <h2>Ustawienia przestrzeni</h2>
+  <form id="admin-login-form">
+    <p>Zaloguj się kontem administratora.</p>
+    <label for="admin-email">E-mail</label>
+    <input id="admin-email" type="email" autocomplete="username" required>
+    <label for="admin-password">Hasło</label>
+    <input id="admin-password" type="password" autocomplete="current-password" required>
+    <button id="admin-submit" type="submit">Zaloguj się</button>
+  </form>
+  <form id="pin-settings-form" hidden>
+    <p>Ustaw wspólny PIN: 6 cyfr. Zmiana wyloguje wszystkie sesje robocze.</p>
+    <label for="new-pin">Nowy PIN</label>
+    <input id="new-pin" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="off" required>
+    <label for="repeat-pin">Powtórz PIN</label>
+    <input id="repeat-pin" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="off" required>
+    <button id="change-pin" type="submit">Zapisz PIN</button>
+  </form>
+  <p id="settings-message" role="status"></p>
+</dialog>
+<div id="workspace" hidden>
 <aside class="sidebar">
 <a class="brand" href="./"><span class="brand-icon">w<span>·</span></span> warsztat<span class="brand-dot">.</span></a>
 <div class="workspace-label">TWOJA PRZESTRZEŃ</div>
@@ -17,7 +54,7 @@
 <div class="sidebar-bottom"><span class="little-spark">✳</span><p>Dobry projekt zaczyna się<br>od dokładnych obliczeń.</p><div class="profile"><span>TW</span><div>Twój warsztat<small>Osobisty zestaw narzędzi</small></div></div></div>
 </aside>
 <div class="main-shell">
-<header class="topbar"><div>Twoje narzędzia <span>/</span> <strong>Rozstaw szczebelków</strong></div><span class="private-label"><i></i> Do Twoich projektów</span></header>
+<header class="topbar"><div class="workspace-actions"><button type="button" data-open-settings>Ustawienia</button><button type="button" id="workspace-logout">Wyloguj</button></div><div>Twoje narzędzia <span>/</span> <strong>Rozstaw szczebelków</strong></div><span class="private-label"><i></i> Do Twoich projektów</span></header>
 <main id="narzedzia">
 <div class="breadcrumbs">BUDOWA I MAJSTERKOWANIE <span> / </span> KALKULATOR</div>
 <section class="page-heading" id="kalkulator"><div><div class="heading-icon">▥</div><h1>Równo od pierwszego<br>do ostatniego szczebelka<span>.</span></h1><p>Oblicz idealny rozstaw w kilku prostych krokach.<br>Ty budujesz, my zajmiemy się liczbami.</p></div><span class="tool-badge">NARZĘDZIE 01 <span aria-hidden="true" class="arrow-icon"></span></span></section>
@@ -39,6 +76,20 @@
 </div></div>
 <section class="formula-section"><div class="formula-icon">ƒ</div><div><h2>Proste liczby. Precyzyjny efekt.</h2><p>Od szerokości segmentu odejmujemy szerokość wszystkich szczebelków,<br>a pozostałe miejsce dzielimy na równe przerwy.</p></div><div class="formula"><span>segment − (liczba × szerokość szczebelka)</span><span>liczba szczebelków + 1</span></div></section>
 <section class="positions-section" id="positions-section"><details><summary>Wymiary montażowe <span>Pozycje szczebelków od lewego słupa ↓</span></summary><p>Odległość od wewnętrznej krawędzi lewego słupa do lewej krawędzi każdego szczebelka. Wyniki zaokrąglono do 0,01 jednostki.</p><div class="table-scroll"><table><thead><tr><th>Szczebelek</th><th>Lewa krawędź</th><th>Prawa krawędź</th></tr></thead><tbody id="positions"></tbody></table></div></details></section>
+<section class="panel projects-panel">
+  <h2>Wspólne projekty</h2>
+  <form id="save-project-form">
+    <label for="project-name">Nazwa projektu</label>
+    <input id="project-name" maxlength="120" required placeholder="Np. ogrodzenie od ulicy">
+    <button id="save-project" type="submit">Zapisz bieżące wymiary</button>
+  </form>
+  <p id="projects-message" role="status"></p>
+  <button id="refresh-projects" type="button">Odśwież listę</button>
+  <p id="projects-empty">Brak zapisanych projektów.</p>
+  <ul id="project-list"></ul>
+  <small>Ostatnie 100 projektów. Kliknij nazwę, aby wczytać wymiary.</small>
+</section>
 <footer><span><strong>warsztat.</strong> Mniej zgadywania. Więcej tworzenia.</span><span>Zrobione z myślą o Twoich projektach <span class="footer-spark">✳</span></span></footer>
 </main></div>
+</div>
 </body></html>
