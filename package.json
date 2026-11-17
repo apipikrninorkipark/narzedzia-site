@@ -1,0 +1,6 @@
+{
+  "name": "narzedzia-site",
+  "private": true,
+  "scripts": { "test": "node tests/workspace-ui.cjs" },
+  "devDependencies": { "playwright": "1.62.1" }
+}
