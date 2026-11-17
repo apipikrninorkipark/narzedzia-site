@@ -62,3 +62,23 @@ npm test
 
 Można użyć zainstalowanego Chromium: `CHROMIUM_PATH=/usr/bin/chromium npm test`.
 Test korzysta z symulowanych odpowiedzi API i sprawdza blokadę interfejsu, zapis/wczytanie danych, jednostki, sesję po odświeżeniu, odmowę dostępu do ustawień, zmianę PIN-u oraz układ mobilny. Nie sprawdza wdrożenia SQL ani rzeczywistych uprawnień w Supabase.
+
+## GRANADA — kalkulator cenników
+
+Link **GRANADA · Cenniki** otwiera `granada.html` po zalogowaniu istniejącym PIN-em. Obliczenia i domyślne wartości pochodzą z przekazanego kalkulatora HTML. Kopia robocza zapisuje się lokalnie; przycisk **Zapisz nową wersję w bazie** tworzy wspólny, nazwany cennik. **Wczytaj wybrany** zastępuje kopię roboczą po potwierdzeniu. Import JSON można następnie zapisać w bazie. Oryginalny plik otwierany przez file:// ma osobny localStorage: przenieś swoje dane przez eksport/import JSON.
+
+Wdrożenie dodatku do skonfigurowanej przestrzeni:
+
+1. W Supabase SQL Editor uruchom `supabase/migrations/202611170002_granada.sql`. Nie uruchamiaj ponownie pierwszej migracji, jeśli była już zastosowana.
+2. Wdróż zaktualizowaną funkcję wraz z plikiem `granada.ts`:
+   ```sh
+   supabase link --project-ref pxmasspzretdgribwfgn
+   supabase functions deploy workspace-api --no-verify-jwt
+   ```
+3. Opublikuj zmieniony `index.html` i nowy `granada.html` na dotychczasowym hostingu.
+
+Tabela `workspace_granada_prices` ma RLS i jest dostępna wyłącznie przez Edge Function po sprawdzeniu sesji PIN. Lista pokazuje 100 najnowszych wersji; wcześniejsze rekordy pozostają w bazie. Równoległe zapisy tworzą osobne rekordy. Zapisane są edytowalne wartości, a wyniki wylicza kalkulator. Brak migracji lub wdrożenia funkcji wyświetli błąd połączenia/operacji zamiast potwierdzenia zapisu.
+
+Sprawdzenie docelowe: bez sesji `granada-list`, `granada-get` i `granada-save` powinny zwracać 401 (z dozwolonego origin); po PIN-ie zapisz cennik, otwórz drugą przeglądarkę, zaloguj się tym samym PIN-em i wczytaj zapis. Po zmianie PIN-u poprzednia sesja musi zostać odrzucona. Sprawdź też odrzucanie ujemnych cen i prowizji 100% oraz brak bezpośredniego dostępu do tabeli publicznym kluczem.
+
+Test integracji z symulowanym API: `CHROMIUM_PATH=/usr/bin/chromium node tests/granada-ui.cjs`.
