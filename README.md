@@ -84,3 +84,16 @@ Sprawdzenie docelowe: bez sesji `granada-list`, `granada-get` i `granada-save` p
 Test integracji z symulowanym API: `CHROMIUM_PATH=/usr/bin/chromium node tests/granada-ui.cjs`.
 
 W sekcji **Balia** pole **Stawka za osobę (PLN)** zmienia ceny wszystkich grup. Domyślnie wynosi 95 PLN. Stawka jest częścią kopii roboczej, eksportu JSON i zapisu w bazie. Starsze cenniki bez stawki przyjmują 95 PLN. Po dodaniu tego pola należy ponownie wdrożyć `workspace-api` wraz z `granada.ts`; nowa migracja SQL nie jest potrzebna.
+
+## „Nieznana operacja” przy zapisie cenników
+
+Ten komunikat dla poleceń `granada-list`, `granada-save` lub `granada-get` oznacza, że opublikowana funkcja `workspace-api` nie obsługuje tych operacji. Samo scalenie PR i publikacja GitHub Pages nie aktualizują Edge Function w Supabase.
+
+Aktualizację można wykonać bez Supabase CLI:
+
+1. Przygotuj plik do edytora panelu: `node scripts/build-workspace-api.cjs /tmp/workspace-api.ts`. Zawiera funkcję i walidator, bez lokalnego importu `granada.ts`.
+2. W panelu projektu Supabase przejdź do **Edge Functions → workspace-api → Code**. Zastąp zawartość `index.ts` całą zawartością przygotowanego pliku i kliknij **Deploy updates**. Zachowaj dotychczasową konfigurację `ALLOWED_ORIGINS` i weryfikacji JWT (funkcja sprawdza własne sesje PIN).
+3. W **Table Editor** sprawdź tabelę `workspace_granada_prices`. Jeżeli jej brakuje, wykonaj w **SQL Editor** plik `supabase/migrations/202611170002_granada.sql`.
+4. Odśwież kalkulator. Sprawdź kolejno odświeżenie listy, zapis nazwanego cennika i jego wczytanie w drugiej karcie po zalogowaniu PIN-em.
+
+Sprawdzenie kodu funkcji bez połączenia z produkcją: `node --experimental-vm-modules tests/workspace-api.cjs` (Node 24). Test uruchamia rzeczywisty handler z symulowaną bazą, obejmuje zapis, listę, odczyt, odrzucanie nieprawidłowych wartości i brak/wygasłą sesję. Nie potwierdza stanu wdrożenia w Supabase.
