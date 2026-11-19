@@ -6,7 +6,7 @@ const assert=require('node:assert/strict');
 (async()=>{
  const root=path.resolve(__dirname,'..');
  const server=http.createServer(async(req,res)=>{try{
-  res.setHeader('Content-Type',req.url.endsWith('.js')?'application/javascript':'text/html');
+  res.setHeader('Content-Type',req.url.endsWith('.js')?'application/javascript':req.url.endsWith('.css')?'text/css':'text/html');
   res.end(await fs.readFile(path.join(root,req.url==='/'?'index.html':req.url)));
  }catch{res.writeHead(404).end();}}).listen(8766);
  let browser;

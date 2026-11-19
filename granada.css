@@ -1,0 +1,61 @@
+/* The same colors identify accommodation groups in both seasonal price lists. */
+.price-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  list-style: none;
+  margin: 0;
+  padding: 16px 24px;
+  background: #fff;
+  border-bottom: 1px solid #d1d7dc;
+  color: #334155;
+  font-size: 12px;
+}
+.price-legend li { display: flex; align-items: center; gap: 8px; }
+.swatch { display: inline-block; width: 16px; height: 16px; border: 1px solid #66708566; border-radius: 3px; flex-shrink: 0; }
+.group-blue { --row-color: #d0dff8; background: var(--row-color); }
+.group-violet { --row-color: #d8d0ff; background: var(--row-color); }
+.group-plum { --row-color: #d8b4da; background: var(--row-color); }
+.booking-price { background: #315f9f; color: #fff; }
+.website-price { background: #ffc1b6; color: #522920; }
+.editable-key { background: #fff; border: 2px solid #3c6950; }
+#content[data-price-view="high"] > .card:first-child > .card-head,
+#content[data-price-view="low"] > .card:first-child > .card-head {
+  background: #ffb0a5;
+  border-bottom-color: #db8e83;
+}
+#content[data-price-view="high"] > .card:first-child > .card-head h2,
+#content[data-price-view="low"] > .card:first-child > .card-head h2 { color: #512920; }
+#content[data-price-view="high"] > .card:first-child > .card-head p,
+#content[data-price-view="low"] > .card:first-child > .card-head p { color: #653d34; }
+.pricing-table { min-width: 1330px; color: #1c2639; }
+.pricing-table th, .pricing-table td { border-right: 1px solid #52607930; border-bottom: 1px solid #52607930; padding: 14px 12px; }
+.pricing-table thead th { background: #e0e2e5; color: #303845; font-weight: 700; white-space: normal; min-width: 88px; line-height: 1.5; }
+.pricing-table thead .booking-price { background: #244d85; color: #fff; }
+.pricing-table thead .website-price { background: #ffb0a5; color: #512920; }
+.pricing-table tbody th { background: var(--row-color); font-size: 12px; letter-spacing: 0; text-transform: none; color: #1c2639; font-weight: 700; }
+.pricing-table tr > :first-child { position: sticky; left: 0; z-index: 1; min-width: 180px; box-shadow: 2px 0 0 #52607955; }
+.pricing-table thead tr > :first-child { z-index: 2; }
+.pricing-table .amount { color: inherit; font-weight: 600; }
+.pricing-table td.booking-price { color: #fff; }
+.pricing-table td.website-price { color: #522920; }
+.pricing-table .booking-price:nth-child(9), .pricing-table .website-price:nth-child(10) { border-left: 3px solid #37465b; }
+.pricing-table .unavailable { background: #b9bec6; color: #4c5563; }
+.pricing-table .group-start > * { border-top: 3px solid #37465b; }
+.pricing-table tbody tr:hover { background: var(--row-color); }
+.pricing-table tbody tr:hover > * { box-shadow: inset 0 2px #1c26394d, inset 0 -2px #1c26394d; }
+.pricing-table input[type="number"] { background: #fffdf7; color: #1c2639; border: 2px solid #3c6950; width: 83px; }
+.pricing-table input[type="number"]:invalid { border-color: #a13e2d; }
+.pricing-table input:focus-visible { outline: 3px solid #122e52; outline-offset: 2px; }
+.table-wrap:focus-visible { outline: 3px solid #315f9f; outline-offset: -3px; }
+@media (max-width: 760px) {
+  .price-legend { padding: 14px 16px; gap: 10px 16px; font-size: 11px; }
+  .pricing-table tr > :first-child { min-width: 145px; max-width: 145px; white-space: normal; }
+}
+@media print {
+  .pricing-table { min-width: 0; }
+  .pricing-table tr > :first-child { position: static; min-width: 0; box-shadow: none; }
+  .pricing-table th, .pricing-table td { padding: 5px 3px; font-size: 8px; min-width: 0; }
+  .pricing-table input[type="number"] { width: 48px; font-size: 8px; padding: 0; border: 0; }
+  .pricing-table, .price-legend, #content > .card:first-child > .card-head { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
